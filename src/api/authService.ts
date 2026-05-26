@@ -14,7 +14,6 @@ export interface TokenResponse {
 }
 
 export const login = async (data: LoginRequest): Promise<TokenResponse> => {
-  // 인스턴스를 사용하므로 주소 뒷부분만 적으면 됩니다.
   const response = await apiClient.post<TokenResponse>(
     "/api/customers/login",
     data,
@@ -22,4 +21,43 @@ export const login = async (data: LoginRequest): Promise<TokenResponse> => {
   return response.data;
 };
 
-// 나중에 회원가입이나 로그아웃이 추가되면 여기에 이어서 작성하면 됨
+// 회원가입 요청 데이터 타입 정의
+export interface SignupRequest {
+  email: string;
+  username: string;
+  password: string;
+}
+
+/**
+ * 일반 고객 회원가입 API
+ */
+export const signup = async (data: SignupRequest): Promise<number> => {
+  const response = await apiClient.post<number>("/api/customers/signup", data);
+  return response.data;
+};
+
+/**
+ * 로그아웃 API
+ */
+export const logout = async (): Promise<number> => {
+  const response = await apiClient.post<number>("/api/auth/logout");
+  return response.data;
+};
+
+// 내 정보 조회 응답 데이터 타입 정의
+export interface UserProfileResponse {
+  id: number;
+  email: string;
+  username: string; // 백엔드 DTO 및 DB 필드명과 일치
+}
+
+/**
+ * 로그인한 유저 본인의 프로필 정보 조회 API
+ * @returns {UserProfileResponse} 유저 정보 객체
+ */
+export const fetchMyProfile = async (): Promise<UserProfileResponse> => {
+  // 백엔드 내 정보 조회 엔드포인트 주소 입력 (예시: /api/customers/me)
+  const response =
+    await apiClient.get<UserProfileResponse>("/api/customers/me");
+  return response.data;
+};
