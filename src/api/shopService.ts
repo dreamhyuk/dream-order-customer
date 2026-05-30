@@ -46,3 +46,63 @@ export const searchShops = async (
   );
   return response.data;
 };
+
+export interface Address {
+  city: string;
+  street: string;
+  zipcode: string;
+}
+
+export interface ShopDetailResponse {
+  shopName: string;
+  address: Address;
+  averageRating: number;
+  reviewCount: number;
+}
+
+//메뉴 단건 정보
+export interface MenuSummaryResponse {
+  id: number;
+  menuName: string;
+  price: number;
+}
+
+//백엔드 MenuGroupResponseDto 매핑 (계층형 구조)
+export interface MenuGroupResponse {
+  menuGroupId: number;
+  name: string;
+  priority: number;
+  menus: MenuSummaryResponse[];
+}
+
+/**
+ * 1. 가게 상세 기본 정보 조회 API
+ * @param shopId 가게 고유 ID
+ * 백엔드 경로: GET /api/customers/shops/{shopId}
+ */
+export const getShopDetail = async (
+  shopId: number,
+): Promise<ShopDetailResponse> => {
+  console.log(`🚀 가게 상세 정보 요청 - shopId: ${shopId}`);
+
+  const response = await apiClient.get<ShopDetailResponse>(
+    `/api/customers/shops/${shopId}`,
+  );
+  return response.data;
+};
+
+/**
+ * 2. 특정 가게의 전체 메뉴 그룹 및 메뉴 목록 조회 API
+ * @param shopId 가게 고유 ID
+ * 백엔드 경로: GET /api/customers/shops/{shopId}/menus
+ */
+export const getShopMenus = async (
+  shopId: number,
+): Promise<MenuGroupResponse[]> => {
+  console.log(`🚀 가게 메뉴 목록 요청 - shopId: ${shopId}`);
+
+  const response = await apiClient.get<MenuGroupResponse[]>(
+    `/api/customers/shops/${shopId}/menus`,
+  );
+  return response.data;
+};

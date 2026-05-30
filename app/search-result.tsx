@@ -84,7 +84,7 @@ export default function SearchResultScreen() {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.shopCard}
-              onPress={() => console.log(`${item.name} 가게 상세로 이동 예정`)}
+              onPress={() => router.push(`/shops/${item.id}`)}
             >
               <View style={styles.shopImageDummy}>
                 <Text style={styles.imageText}>가게 사진</Text>
